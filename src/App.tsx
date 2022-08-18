@@ -1,25 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import SingleTodoList from './components/SingleTodoList';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <main className="p-5 flex flex-col items-center">
+      <header className="text-4xl">
+        <h1 className="text-pink-300 text-6xl p-5">todos</h1>
       </header>
-    </div>
+      <SingleTodoList />
+    </main>
   );
 }
 
