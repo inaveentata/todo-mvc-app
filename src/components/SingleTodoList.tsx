@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import TodoItems from "./subcomponents/TodoItems";
 
-export type TodoType = {
+export type TodoItem = {
   id: string;
   text: string;
   isTodoMarked: boolean;
 };
 
 const SingleTodoList = () => {
-  const [todoList, setTodoList] = useState<TodoType[]>([]);
-  const [activeTodos, setActiveTodos] = useState<TodoType[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<TodoType[]>([]);
+  const [todoList, setTodoList] = useState<TodoItem[]>([]);
   const [activeTab, setActiveTab] = useState({
     isTodosActive: false,
     isTodosCompleted: false,
@@ -58,34 +56,13 @@ const SingleTodoList = () => {
     setTodoList([...sortedItems, strikeThrough]);
   };
 
-  const showCompleted = () => {
-    setActiveTab((prevTabs) => ({
-      ...prevTabs,
-      isTodosCompleted: true,
-      isTodosActive: false,
-    }));
-    const completed = todoList.filter((item) => item.isTodoMarked === true);
-    setCompletedTodos(completed);
-  };
-
-  const showActive = () => {
-    setActiveTab((prevTabs) => ({
-      ...prevTabs,
-      isTodosActive: true,
-      isTodosCompleted: false,
-    }));
-    const active = todoList.filter((item) => item.isTodoMarked === false);
-    setActiveTodos(active);
-  };
-
   const clearCompleted = () => {
     const active = todoList.filter((item) => item.isTodoMarked === false);
     setTodoList(active);
-    setActiveTab((prevTabs) => ({
-      ...prevTabs,
+    setActiveTab({
       isTodosActive: false,
       isTodosCompleted: false,
-    }));
+    });
   };
 
   const itemsLeft = todoList.filter((item) => item.isTodoMarked === false);
@@ -93,6 +70,15 @@ const SingleTodoList = () => {
     itemsLeft.length === 1
       ? `${itemsLeft.length} item left`
       : `${itemsLeft.length} items left`;
+  
+  let renderTodos: TodoItem[]
+  if (activeTab.isTodosActive) {
+    renderTodos = todoList.filter((item) => item.isTodoMarked === false);
+  } else if (activeTab.isTodosCompleted) {
+    renderTodos = todoList.filter((item) => item.isTodoMarked === true);
+  } else {
+    renderTodos = todoList;
+  }
   return (
     <section
       className="bg-white shadow-lg 
@@ -109,28 +95,16 @@ const SingleTodoList = () => {
         />
       </form>
       <ul className="list-none ">
-        {todoList.length && activeTab.isTodosCompleted ? (
+        {
           <TodoItems
-            todoList={completedTodos}
+            todoList={renderTodos}
             handleStrikeThrough={handleStrikeThrough}
             deleteTodo={deleteTodo}
           />
-        ) : activeTab.isTodosActive ? (
-          <TodoItems
-            todoList={activeTodos}
-            handleStrikeThrough={handleStrikeThrough}
-            deleteTodo={deleteTodo}
-          />
-        ) : (
-          <TodoItems
-            todoList={todoList}
-            handleStrikeThrough={handleStrikeThrough}
-            deleteTodo={deleteTodo}
-          />
-        )}
+        }
       </ul>
       {todoList.length ? (
-        <div className="p-2 flex justify-between text-gray-600">
+        <div className="p-2 flex justify-between text-gray-500">
           {itemsLeft.length === 0 ? (
             <span>No active items</span>
           ) : (
@@ -139,22 +113,45 @@ const SingleTodoList = () => {
           <div>
             <button
               onClick={() =>
-                setActiveTab((prevTabs) => ({
-                  ...prevTabs,
+                setActiveTab({
                   isTodosActive: false,
                   isTodosCompleted: false,
-                }))
+                })
               }
+              className={` px-1 rounded-sm ${
+                !activeTab.isTodosActive && !activeTab.isTodosCompleted && "border-[1.5px] border-pink-300"
+              } `}
             >
               All
             </button>
-            <button onClick={showActive} className="mx-5">
+            <button
+              onClick={() =>
+                setActiveTab({
+                  isTodosActive: true,
+                  isTodosCompleted: false,
+                })
+              }
+              className={`mx-5 px-1 rounded-sm ${
+                activeTab.isTodosActive && "border-[1.5px] border-pink-300"
+              } `}
+            >
               Active
             </button>
-            <button onClick={showCompleted}>Completed</button>
+            <button
+              onClick={() =>
+                setActiveTab({
+                  isTodosActive: false,
+                  isTodosCompleted: true,
+                })
+              }
+              className={`px-1 rounded-sm ${
+                activeTab.isTodosCompleted && "border-[1.5px] border-pink-300"
+              }`}
+            >
+              Completed
+            </button>
           </div>
           <button onClick={clearCompleted} className=" hover:underline">
-            {/* {completedTodos.length?  "Clear completed" : ''} */}
             Clear completed
           </button>
         </div>

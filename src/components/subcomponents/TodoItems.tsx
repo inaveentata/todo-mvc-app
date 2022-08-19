@@ -1,15 +1,16 @@
 import React from 'react'
 import { BsCheckCircle, BsCircle } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
-import { TodoType } from '../SingleTodoList';
+import { TodoItem } from '../SingleTodoList';
 
 type TodoItemProps = {
-  todoList: TodoType[];
+  todoList: TodoItem[];
   handleStrikeThrough: (id: string) => void;
   deleteTodo:(id: string)=> void
 }
 
-const TodoItems = ({todoList,handleStrikeThrough,deleteTodo}: TodoItemProps) => {
+const TodoItems = ({ todoList, handleStrikeThrough, deleteTodo }: TodoItemProps) => {
+  
   return (
     
     <>
