@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import TodoItems from "./subcomponents/TodoItems";
+import TodoItems from "./TodoItems";
 
 export type TodoItem = {
   id: string;

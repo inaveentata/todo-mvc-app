@@ -1,7 +1,7 @@
 import React from 'react'
 import { BsCheckCircle, BsCircle } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
-import { TodoItem } from '../SingleTodoList';
+import { TodoItem } from './SingleTodoList';
 
 type TodoItemProps = {
   todoList: TodoItem[];
